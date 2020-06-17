@@ -1,14 +1,11 @@
 package com.lcy.miaosha.redis;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+
 
 @Service
 public class RedisService {
@@ -64,6 +61,7 @@ public class RedisService {
                 jedis.setex(realKey,seconds,str);
             }
             jedis.set(realKey, str);
+            //System.out.println("把<"+realKey+","+str+">写进redis");
             return true;
 
         }finally {
@@ -91,6 +89,23 @@ public class RedisService {
             returnToPool(jedis);
         }
 
+    }
+
+
+    /**
+     * 删除
+     * */
+    public boolean delete(KeyPrefix prefix, String key) {
+        Jedis jedis = null;
+        try {
+            jedis =  jedisPool.getResource();
+            //生成真正的key
+            String realKey  = prefix.getPrefix() + key;
+            long ret =  jedis.del(key);
+            return ret > 0;
+        }finally {
+            returnToPool(jedis);
+        }
     }
 
     /**

@@ -2,12 +2,12 @@ package com.lcy.miaosha.service;
 
 import com.lcy.miaosha.dao.UserDao;
 import com.lcy.miaosha.pojo.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
     @Autowired
     UserDao userDao;
 
